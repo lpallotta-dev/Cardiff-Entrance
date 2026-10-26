@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selezione Coinquilino - Casa Cardiff</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #e94560;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: #16213e;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #0f3460;
+            background-color: #e94560;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 0;
+        }
+        #question-box {
+            font-size: 1.5rem;
+            margin: 30px 0;
+            min-height: 80px;
+            color: #fff;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        #btn-yes {
+            background-color: #4caf50;
+            color: white;
+        }
+        #btn-no {
+            background-color: #f44336;
+            color: white;
+        }
+        #result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4caf50;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-container">
+        <h1>Casa Cardiff - Test d'ingresso</h1>
+        <div id="question-box">Premi Inizia per scoprire se sei degno di Casa Cardiff.</div>
+        
+        <div class="buttons" id="btn-container">
+            <button id="btn-start" onclick="startTest()">Inizia</button>
+            <button id="btn-yes" class="hidden" onclick="checkAnswer('si')">SÌ</button>
+            <button id="btn-no" class="hidden" onclick="checkAnswer('no')">NO</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Ti droghi?",
+            "Hai un problema con i maschi?",
+            "Sai che questa casa si fa un po' casino e si sente dalle camere quindi devi imparare a dormire anche se c'è un po' di rumore?",
+            "La pulizia e la tolleranza vanno di pari passo?"
+        ];
+
+        let currentIndex = 0;
+
+        function startTest() {
+            document.getElementById('btn-start').classList.add('hidden');
+            document.getElementById('btn-yes').classList.remove('hidden');
+            document.getElementById('btn-no').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIndex < questions.length) {
+                document.getElementById('question-box').innerText = questions[currentIndex];
+            } else {
+                showSuccess();
+            }
+        }
+
+        function checkAnswer(answer) {
+            // Se risponde "si" (che è la risposta corretta per avanzare come da tue istruzioni)
+            if (answer === 'si') {
+                currentIndex++;
+                showQuestion();
+            } else {
+                // Se risponde "no", il test fallisce
+                document.getElementById('question-box').innerText = "Risposta sbagliata. Non sei adatto a Casa Cardiff!";
+                document.getElementById('question-box').style.color = "#f44336";
+                document.getElementById('btn-container').classList.add('hidden');
+            }
+        }
+
+        function showSuccess() {
+            const container = document.getElementById('main-container');
+            container.innerHTML = '<div id="result">BENVENUTO A CARDIFF</div>';
+        }
+    </script>
+
+</body>
+</html>
