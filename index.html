@@ -31,7 +31,6 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Sfondo con gradiente multiplo per l'effetto psichedelico */
             background: linear-gradient(45deg, #ff00ff, #00ffff, #ff0000, #00ff00, #ffff00, #0000ff, #ff00ff);
             background-size: 600% 600%;
             animation: trip-background 8s ease infinite;
@@ -41,11 +40,10 @@
             height: 100vh;
             margin: 0;
             text-align: center;
-            overflow: hidden; /* Evita le barre di scorrimento, fondamentale per il bottone che si muove */
+            overflow: hidden; 
         }
 
         .container {
-            /* Sfondo scuro semi-trasparente per far leggere il testo */
             background-color: rgba(10, 10, 20, 0.85);
             backdrop-filter: blur(10px);
             padding: 40px;
@@ -90,7 +88,7 @@
             border-radius: 12px;
             cursor: pointer;
             text-transform: uppercase;
-            transition: all 0.3s ease; /* Questa transizione renderà il movimento del SÌ più fluido */
+            transition: all 0.3s ease; 
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
             z-index: 9999;
         }
@@ -124,6 +122,12 @@
 </head>
 <body>
 
+    <!-- Audio player nascosto -->
+    <audio id="bg-audio" loop>
+        <source src="psychedelic.mp3" type="audio/mpeg">
+        Il tuo browser non supporta l'elemento audio.
+    </audio>
+
     <div class="container" id="main-container">
         <h1>Casa Cardiff</h1>
         <div id="question-box">Premi Inizia per scoprire se sei adatto a Casa Cardiff.</div>
@@ -136,22 +140,27 @@
     </div>
 
     <script>
-        // Array con le domande e la rispettiva risposta attesa
         const questionsData = [
             { text: "Ti droghi?", expected: "si" },
             { text: "Hai un problema con i maschi?", expected: "no" },
             { text: "In questa casa si fa un po' di casino e si sente dalle camere. Riesci a dormire anche se c'è rumore?", expected: "si" },
             { text: "Pensi che la pulizia e la tolleranza vadano di pari passo?", expected: "si" },
-            { text: "Sei carica per entrare a Cardiff?", expected: "si", isCrazyYes: true } // Nuova domanda
+            { text: "Sei carica per entrare a Cardiff?", expected: "si", isCrazyYes: true } 
         ];
 
         let currentIndex = 0;
-        let crazyInterval; // Variabile per fermare il bottone impazzito alla fine
+        let crazyInterval; 
 
         function startTest() {
             document.getElementById('btn-start').classList.add('hidden');
             document.getElementById('btn-yes').classList.remove('hidden');
             document.getElementById('btn-no').classList.remove('hidden');
+            
+            // Fai partire la musica psichedelica
+            const bgAudio = document.getElementById('bg-audio');
+            bgAudio.volume = 0.5; // Imposta il volume al 50%
+            bgAudio.play().catch(error => console.log("L'autoplay audio richiede un'interazione diretta."));
+            
             showQuestion();
         }
 
@@ -159,7 +168,6 @@
             if (currentIndex < questionsData.length) {
                 document.getElementById('question-box').innerText = questionsData[currentIndex].text;
                 
-                // Se è l'ultima domanda, facciamo impazzire il bottone SÌ
                 if (questionsData[currentIndex].isCrazyYes) {
                     makeYesButtonCrazy();
                 }
@@ -171,28 +179,25 @@
         function makeYesButtonCrazy() {
             const btnYes = document.getElementById('btn-yes');
             
-            // Lo rendiamo fixed in modo che possa muoversi liberamente su tutto lo schermo
             btnYes.style.position = 'fixed';
+            // Transizione più lunga per far sembrare il movimento uno "scivolamento" lento
+            btnYes.style.transition = 'all 1.2s ease-in-out';
             
             crazyInterval = setInterval(() => {
-                // Calcola posizioni random considerando la dimensione della finestra e del bottone
                 const maxX = window.innerWidth - btnYes.offsetWidth;
                 const maxY = window.innerHeight - btnYes.offsetHeight;
                 
                 const randomX = Math.max(0, Math.floor(Math.random() * maxX));
                 const randomY = Math.max(0, Math.floor(Math.random() * maxY));
                 
-                // Applica le nuove posizioni
                 btnYes.style.left = randomX + 'px';
                 btnYes.style.top = randomY + 'px';
-            }, 500); // Si muove ogni mezzo secondo
+            }, 1500); // Si sposta ogni 1.5 secondi (più lento rispetto a prima)
         }
 
         function checkAnswer(answer) {
-            // Controlla se la risposta data corrisponde a quella attesa per la domanda corrente
             if (answer === questionsData[currentIndex].expected) {
                 
-                // Se ha premuto il SI impazzito all'ultima domanda, fermiamo il timer
                 if (crazyInterval) {
                     clearInterval(crazyInterval);
                 }
@@ -200,7 +205,6 @@
                 currentIndex++;
                 showQuestion();
             } else {
-                // Se sbaglia anche solo una risposta, il test fallisce
                 if (crazyInterval) {
                     clearInterval(crazyInterval);
                 }
@@ -209,11 +213,11 @@
                 document.getElementById('question-box').style.color = "#ff0000";
                 document.getElementById('question-box').style.textShadow = "0 0 20px #ff0000";
                 
-                // Nasconde i bottoni
                 document.getElementById('btn-container').classList.add('hidden');
-                
-                // Se il bottone SÌ era fixed, lo nascondiamo manualmente per sicurezza
                 document.getElementById('btn-yes').style.display = 'none';
+                
+                // Ferma la musica in caso di sconfitta (opzionale)
+                document.getElementById('bg-audio').pause();
             }
         }
 
