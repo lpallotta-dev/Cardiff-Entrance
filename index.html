@@ -5,75 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selezione Coinquilino - Casa Cardiff</title>
     <style>
+        /* Animazione psichedelica per lo sfondo principale */
+        @keyframes trip-background {
+            0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+            50% { background-position: 100% 50%; filter: hue-rotate(180deg); }
+            100% { background-position: 0% 50%; filter: hue-rotate(360deg); }
+        }
+
+        /* Animazione al neon pulsante per il contenitore */
+        @keyframes psychedelic-box {
+            0% { box-shadow: 0 0 20px #ff00ff, inset 0 0 20px #00ffff; border-color: #ff00ff; }
+            33% { box-shadow: 0 0 30px #00ff00, inset 0 0 30px #ff0000; border-color: #00ff00; }
+            66% { box-shadow: 0 0 40px #ffff00, inset 0 0 40px #0000ff; border-color: #ffff00; }
+            100% { box-shadow: 0 0 20px #ff00ff, inset 0 0 20px #00ffff; border-color: #ff00ff; }
+        }
+
+        /* Animazione tremolante per il titolo */
+        @keyframes glitch-text {
+            0% { text-shadow: 2px 2px 0px #ff00ff, -2px -2px 0px #00ffff; }
+            25% { text-shadow: -2px 2px 0px #ff0000, 2px -2px 0px #00ff00; }
+            50% { text-shadow: 2px -2px 0px #ffff00, -2px 2px 0px #0000ff; }
+            75% { text-shadow: -2px -2px 0px #ff00ff, 2px 2px 0px #00ffff; }
+            100% { text-shadow: 2px 2px 0px #ff00ff, -2px -2px 0px #00ffff; }
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a2e;
-            color: #e94560;
+            /* Sfondo con gradiente multiplo per l'effetto psichedelico */
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff0000, #00ff00, #ffff00, #0000ff, #ff00ff);
+            background-size: 600% 600%;
+            animation: trip-background 8s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             text-align: center;
+            overflow: hidden; /* Evita le barre di scorrimento */
         }
+
         .container {
-            background-color: #16213e;
+            /* Sfondo scuro semi-trasparente per far leggere il testo */
+            background-color: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(10px);
             padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            border: 3px solid #fff;
             max-width: 600px;
             width: 90%;
+            animation: psychedelic-box 4s linear infinite;
         }
+
         h1 {
-            color: #0f3460;
-            background-color: #e94560;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 0;
-        }
-        #question-box {
-            font-size: 1.5rem;
-            margin: 30px 0;
-            min-height: 80px;
             color: #fff;
+            font-size: 2.5rem;
+            margin-top: 0;
+            text-transform: uppercase;
+            animation: glitch-text 0.5s infinite linear;
         }
+
+        #question-box {
+            font-size: 1.8rem;
+            margin: 40px 0;
+            min-height: 100px;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 0 10px #fff, 0 0 20px #ff00ff, 0 0 30px #00ffff;
+            line-height: 1.4;
+        }
+
         .buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
         }
+
         button {
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border: 2px solid #fff;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-        button:hover {
-            transform: scale(1.05);
-        }
-        #btn-yes {
-            background-color: #4caf50;
-            color: white;
-        }
-        #btn-no {
-            background-color: #f44336;
-            color: white;
-        }
-        #result {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #4caf50;
             text-transform: uppercase;
-            animation: pulse 1.5s infinite;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
-        @keyframes pulse {
+
+        button:hover {
+            transform: scale(1.15) rotate(3deg);
+            box-shadow: 0 0 30px #fff;
+        }
+
+        #btn-start { background-color: #2b2b2b; color: #fff; }
+        #btn-yes { background-color: #00ff00; color: #000; }
+        #btn-no { background-color: #ff0000; color: #fff; }
+
+        #result {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #00ff00;
+            text-transform: uppercase;
+            animation: glitch-text 0.2s infinite linear, pulse-result 1s infinite alternate;
+        }
+
+        @keyframes pulse-result {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            100% { transform: scale(1.2); }
         }
+
         .hidden {
             display: none !important;
         }
@@ -82,7 +122,7 @@
 <body>
 
     <div class="container" id="main-container">
-        <h1>Casa Cardiff - Test d'ingresso</h1>
+        <h1>Casa Cardiff</h1>
         <div id="question-box">Premi Inizia per scoprire se sei adatto a Casa Cardiff.</div>
         
         <div class="buttons" id="btn-container">
@@ -93,7 +133,7 @@
     </div>
 
     <script>
-        // Array con le domande corrette e la rispettiva risposta attesa
+        // Array con le domande e la rispettiva risposta attesa
         const questionsData = [
             { text: "Ti droghi?", expected: "si" },
             { text: "Hai un problema con i maschi?", expected: "no" },
@@ -125,8 +165,9 @@
                 showQuestion();
             } else {
                 // Se sbaglia anche solo una risposta, il test fallisce
-                document.getElementById('question-box').innerText = "Risposta sbagliata. Non sei adatto a Casa Cardiff!";
-                document.getElementById('question-box').style.color = "#f44336";
+                document.getElementById('question-box').innerText = "RISPOSTA SBAGLIATA. IL TRIP È FINITO, NON SEI ADATTO A CASA CARDIFF!";
+                document.getElementById('question-box').style.color = "#ff0000";
+                document.getElementById('question-box').style.textShadow = "0 0 20px #ff0000";
                 document.getElementById('btn-container').classList.add('hidden');
             }
         }
