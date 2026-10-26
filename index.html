@@ -83,7 +83,7 @@
 
     <div class="container" id="main-container">
         <h1>Casa Cardiff - Test d'ingresso</h1>
-        <div id="question-box">Premi Inizia per scoprire se sei degno di Casa Cardiff.</div>
+        <div id="question-box">Premi Inizia per scoprire se sei adatto a Casa Cardiff.</div>
         
         <div class="buttons" id="btn-container">
             <button id="btn-start" onclick="startTest()">Inizia</button>
@@ -93,11 +93,12 @@
     </div>
 
     <script>
-        const questions = [
-            "Ti droghi?",
-            "Hai un problema con i maschi?",
-            "Sai che questa casa si fa un po' casino e si sente dalle camere quindi devi imparare a dormire anche se c'è un po' di rumore?",
-            "La pulizia e la tolleranza vanno di pari passo?"
+        // Array con le domande corrette e la rispettiva risposta attesa
+        const questionsData = [
+            { text: "Ti droghi?", expected: "si" },
+            { text: "Hai un problema con i maschi?", expected: "no" },
+            { text: "In questa casa si fa un po' di casino e si sente dalle camere. Riesci a dormire anche se c'è rumore?", expected: "si" },
+            { text: "Pensi che la pulizia e la tolleranza vadano di pari passo?", expected: "si" }
         ];
 
         let currentIndex = 0;
@@ -110,20 +111,20 @@
         }
 
         function showQuestion() {
-            if (currentIndex < questions.length) {
-                document.getElementById('question-box').innerText = questions[currentIndex];
+            if (currentIndex < questionsData.length) {
+                document.getElementById('question-box').innerText = questionsData[currentIndex].text;
             } else {
                 showSuccess();
             }
         }
 
         function checkAnswer(answer) {
-            // Se risponde "si" (che è la risposta corretta per avanzare come da tue istruzioni)
-            if (answer === 'si') {
+            // Controlla se la risposta data corrisponde a quella attesa per la domanda corrente
+            if (answer === questionsData[currentIndex].expected) {
                 currentIndex++;
                 showQuestion();
             } else {
-                // Se risponde "no", il test fallisce
+                // Se sbaglia anche solo una risposta, il test fallisce
                 document.getElementById('question-box').innerText = "Risposta sbagliata. Non sei adatto a Casa Cardiff!";
                 document.getElementById('question-box').style.color = "#f44336";
                 document.getElementById('btn-container').classList.add('hidden');
