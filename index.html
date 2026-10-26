@@ -29,6 +29,12 @@
             100% { text-shadow: 2px 2px 0px #ff00ff, -2px -2px 0px #00ffff; }
         }
 
+        /* Animazione salto per la rana */
+        @keyframes frog-hop {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-40px) scale(1.05); }
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(45deg, #ff00ff, #00ffff, #ff0000, #00ff00, #ffff00, #0000ff, #ff00ff);
@@ -43,6 +49,45 @@
             overflow: hidden; 
         }
 
+        /* Stile Schermata Introduttiva con Tina */
+        #intro-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .speech-bubble {
+            position: relative;
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px 30px;
+            color: #000;
+            font-size: 1.5rem;
+            font-weight: bold;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 20px 20px 0 0;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .frog-container {
+            animation: frog-hop 0.8s infinite cubic-bezier(0.28, 0.84, 0.42, 1);
+            margin-bottom: 30px;
+        }
+
+        /* Contenitore principale del test */
         .container {
             background-color: rgba(10, 10, 20, 0.85);
             backdrop-filter: blur(10px);
@@ -98,7 +143,7 @@
             box-shadow: 0 0 30px #fff;
         }
 
-        #btn-start { background-color: #2b2b2b; color: #fff; }
+        #btn-intro-yes { background-color: #ff7f00; color: #fff; border-color: #fff; font-size: 2rem; padding: 15px 60px; }
         #btn-yes { background-color: #00ff00; color: #000; }
         #btn-no { background-color: #ff0000; color: #fff; }
 
@@ -128,14 +173,41 @@
         Il tuo browser non supporta l'elemento audio.
     </audio>
 
-    <div class="container" id="main-container">
+    <!-- Schermata introduttiva con Tina la Rana -->
+    <div id="intro-screen">
+        <div class="speech-bubble">
+            Ciao sono Tina la rana di Cardiff, sei pronta a capire se sei la benvenuta?
+        </div>
+        <div class="frog-container">
+            <!-- Disegno SVG di Tina la Rana -->
+            <svg viewBox="0 0 100 100" width="150" height="150">
+                <!-- Occhi -->
+                <circle cx="25" cy="30" r="18" fill="#ff7f00" stroke="#000" stroke-width="2"/>
+                <circle cx="75" cy="30" r="18" fill="#ff7f00" stroke="#000" stroke-width="2"/>
+                <circle cx="25" cy="28" r="8" fill="#fff"/>
+                <circle cx="75" cy="28" r="8" fill="#fff"/>
+                <circle cx="25" cy="28" r="3" fill="#000"/>
+                <circle cx="75" cy="28" r="3" fill="#000"/>
+                <!-- Corpo -->
+                <ellipse cx="50" cy="60" rx="45" ry="35" fill="#ff7f00" stroke="#000" stroke-width="2"/>
+                <!-- Bocca Sorridente -->
+                <path d="M 30 65 Q 50 85 70 65" stroke="#000" stroke-width="4" fill="transparent"/>
+                <!-- Zampe -->
+                <ellipse cx="15" cy="85" rx="15" ry="8" fill="#ff7f00" stroke="#000" stroke-width="2"/>
+                <ellipse cx="85" cy="85" rx="15" ry="8" fill="#ff7f00" stroke="#000" stroke-width="2"/>
+            </svg>
+        </div>
+        <button id="btn-intro-yes" onclick="startTest()">SÌ</button>
+    </div>
+
+    <!-- Schermata principale del test (inizialmente nascosta) -->
+    <div class="container hidden" id="main-container">
         <h1>Casa Cardiff</h1>
-        <div id="question-box">Premi Inizia per scoprire se sei adatto a Casa Cardiff.</div>
+        <div id="question-box"></div>
         
         <div class="buttons" id="btn-container">
-            <button id="btn-start" onclick="startTest()">Inizia</button>
-            <button id="btn-yes" class="hidden" onclick="checkAnswer('si')">SÌ</button>
-            <button id="btn-no" class="hidden" onclick="checkAnswer('no')">NO</button>
+            <button id="btn-yes" onclick="checkAnswer('si')">SÌ</button>
+            <button id="btn-no" onclick="checkAnswer('no')">NO</button>
         </div>
     </div>
 
@@ -152,13 +224,14 @@
         let crazyInterval; 
 
         function startTest() {
-            document.getElementById('btn-start').classList.add('hidden');
-            document.getElementById('btn-yes').classList.remove('hidden');
-            document.getElementById('btn-no').classList.remove('hidden');
+            // Nasconde l'introduzione di Tina
+            document.getElementById('intro-screen').classList.add('hidden');
+            // Mostra il contenitore del test
+            document.getElementById('main-container').classList.remove('hidden');
             
             // Fai partire la musica psichedelica
             const bgAudio = document.getElementById('bg-audio');
-            bgAudio.volume = 0.5; // Imposta il volume al 50%
+            bgAudio.volume = 0.5; 
             bgAudio.play().catch(error => console.log("L'autoplay audio richiede un'interazione diretta."));
             
             showQuestion();
@@ -180,7 +253,6 @@
             const btnYes = document.getElementById('btn-yes');
             
             btnYes.style.position = 'fixed';
-            // Transizione più lunga per far sembrare il movimento uno "scivolamento" lento
             btnYes.style.transition = 'all 1.2s ease-in-out';
             
             crazyInterval = setInterval(() => {
@@ -192,7 +264,7 @@
                 
                 btnYes.style.left = randomX + 'px';
                 btnYes.style.top = randomY + 'px';
-            }, 1500); // Si sposta ogni 1.5 secondi (più lento rispetto a prima)
+            }, 1500);
         }
 
         function checkAnswer(answer) {
@@ -209,14 +281,13 @@
                     clearInterval(crazyInterval);
                 }
                 
-                document.getElementById('question-box').innerText = "RISPOSTA SBAGLIATA. IL TRIP È FINITO, NON SEI ADATTO A CASA CARDIFF!";
+                document.getElementById('question-box').innerText = "RISPOSTA SBAGLIATA. IL TRIP È FINITO, NON SEI ADATTA A CASA CARDIFF!";
                 document.getElementById('question-box').style.color = "#ff0000";
                 document.getElementById('question-box').style.textShadow = "0 0 20px #ff0000";
                 
                 document.getElementById('btn-container').classList.add('hidden');
                 document.getElementById('btn-yes').style.display = 'none';
                 
-                // Ferma la musica in caso di sconfitta (opzionale)
                 document.getElementById('bg-audio').pause();
             }
         }
